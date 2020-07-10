@@ -58,3 +58,9 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+maestro_unity/.idea
+maestro_unity/Library
+packages-lock.json
+*.DotSettings
+maestro_unity/Temp
+maestro_unity/obj
