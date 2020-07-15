@@ -3,10 +3,11 @@ using System;
 namespace SuperMaxim.IOC.Attributes
 {
     // TODO review AttributeUsage params
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public class TypeMapAttribute : Attribute
     {
-        // TODO use custom ID
-        public override object TypeId { get; }
+        public bool IsSingleton { get; set; }
+        
+        public bool IsLazy { get; set; }
     }
 }

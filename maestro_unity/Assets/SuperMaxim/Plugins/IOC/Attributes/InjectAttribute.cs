@@ -3,7 +3,7 @@ using System;
 namespace SuperMaxim.IOC.Attributes
 {
     // TODO review AttributeUsage params
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class InjectAttribute : Attribute
     {
         // TODO use custom ID
