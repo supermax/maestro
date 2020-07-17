@@ -6,11 +6,8 @@ using SuperMaxim.IOC.Attributes;
 
 namespace SuperMaxim.IOC.Extensions
 {
-    internal static class ReflectionHelper
+    internal static class ReflectionExtensions
     {
-        // TODO add cache for type with ctors. props, methods
-        // TODO add get ctors, props, methods, attribs
-
         public static ConstructorInfo GetDefaultConstructor(this Type src)
         {
             ConstructorInfo defCtor = null;

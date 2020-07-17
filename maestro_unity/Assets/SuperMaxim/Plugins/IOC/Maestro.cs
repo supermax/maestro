@@ -1,23 +1,34 @@
 using System;
-using System.Data;
 using System.Reflection;
 using SuperMaxim.Core.Extensions;
+using SuperMaxim.Core.Objects;
 using SuperMaxim.IOC.Attributes;
 using SuperMaxim.IOC.Extensions;
-using Object = UnityEngine.Object;
 
 namespace SuperMaxim.IOC
 {
-    public class DIMaestro : IMaestro
+    public sealed class Maestro : IMaestro, IMaestroAdvanced
     {
-        public T Resolve<T>(string key = null, params object[] args)
+        private static readonly Maestro DefaultInstance = new Maestro();
+
+        public static IMaestro Default => DefaultInstance;
+
+        public static IMaestroAdvanced Advanced => DefaultInstance;
+        
+        private Maestro()
+        {
+            
+        }
+        
+        public T Resolve<T>() where T : class
         {
             // TODO
-            return default;
+            var instance = Resolve(typeof(T), null) as T;
+            return instance;
         }
         
         // TODO split into short methods
-        private object Resolve(Type src)
+        private object Resolve(Type src, object[] args)
         {
             if (src == null)
             {
@@ -44,8 +55,8 @@ namespace SuperMaxim.IOC
             {
                 foreach (var dependency in depAtt.Dependencies)
                 {
-                    // check for circular dependency
-                    Resolve(dependency);
+                    // TODO check for circular dependency
+                    Resolve(dependency, args);
                 }
             }
 
@@ -63,11 +74,15 @@ namespace SuperMaxim.IOC
             }
             else
             {
-                foreach (var ctorParam in ctorParams)
+                var ctorParamValues = new object[ctorParams.Length];
+                for (var  i = 0; i < ctorParams.Length; i++)
                 {
-                    // TODO init param
+                    var ctorParam = ctorParams[i];
+                    var ctorParamType = ctorParam.ParameterType;
+                    var ctorParamValue = Resolve(ctorParamType, args);
+                    ctorParamValues[i] = ctorParamValue;
                 }
-                // TODO invoke ctor with params
+                instance = ctor.Invoke(ctorParamValues);
             }
 
             var props = src.GetInjectableProperties();
@@ -81,7 +96,7 @@ namespace SuperMaxim.IOC
                         continue;
                     }
 
-                    var propValue = Resolve(prop.PropertyType);
+                    var propValue = Resolve(prop.PropertyType, args);
                     prop.SetValue(instance, propValue);
                 }
             }
@@ -99,7 +114,7 @@ namespace SuperMaxim.IOC
                         {
                             var methodParam = methodParams[i];
                             var paramType = methodParam.ParameterType;
-                            var paramInstance = Resolve(paramType);
+                            var paramInstance = Resolve(paramType, args);
                             methodParamsAry[i] = paramInstance;
                         }
                         method.Invoke(instance, methodParamsAry);

@@ -9,5 +9,7 @@ namespace SuperMaxim.IOC.Attributes
         public bool IsSingleton { get; set; }
         
         public bool IsLazy { get; set; }
+        
+        public Type[] MapTypes { get; set; }
     }
 }
