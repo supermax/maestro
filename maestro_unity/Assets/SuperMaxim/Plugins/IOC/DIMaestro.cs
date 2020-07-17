@@ -16,7 +16,8 @@ namespace SuperMaxim.IOC
             return default;
         }
         
-        private object Instantiate(Type src)
+        // TODO split into short methods
+        private object Resolve(Type src)
         {
             if (src == null)
             {
@@ -43,7 +44,8 @@ namespace SuperMaxim.IOC
             {
                 foreach (var dependency in depAtt.Dependencies)
                 {
-                    Instantiate(dependency);
+                    // check for circular dependency
+                    Resolve(dependency);
                 }
             }
 
@@ -58,6 +60,55 @@ namespace SuperMaxim.IOC
             if (ctorParams.IsNullOrEmpty())
             {
                 instance = ctor.Invoke(null);
+            }
+            else
+            {
+                foreach (var ctorParam in ctorParams)
+                {
+                    // TODO init param
+                }
+                // TODO invoke ctor with params
+            }
+
+            var props = src.GetInjectableProperties();
+            if (!props.IsNullOrEmpty())
+            {
+                foreach (var prop in props)
+                {
+                    if (!prop.CanWrite)
+                    {
+                        // TODO write to log
+                        continue;
+                    }
+
+                    var propValue = Resolve(prop.PropertyType);
+                    prop.SetValue(instance, propValue);
+                }
+            }
+
+            var methods = src.GetExecutableMethods();
+            if (!methods.IsNullOrEmpty())
+            {
+                foreach (var method in methods)
+                {
+                    var methodParams = method.GetParameters();
+                    if (!methodParams.IsNullOrEmpty())
+                    {
+                        var methodParamsAry = new object[methodParams.Length];
+                        for (var i = 0; i < methodParams.Length; i++)
+                        {
+                            var methodParam = methodParams[i];
+                            var paramType = methodParam.ParameterType;
+                            var paramInstance = Resolve(paramType);
+                            methodParamsAry[i] = paramInstance;
+                        }
+                        method.Invoke(instance, methodParamsAry);
+                    }
+                    else
+                    {
+                        method.Invoke(instance, null);
+                    }
+                }
             }
             return instance;
         }
