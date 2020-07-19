@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace SuperMaxim.IOC.Config
 {
@@ -6,5 +7,8 @@ namespace SuperMaxim.IOC.Config
     public class AssemblyConfig
     {
         // TODO implement
+        
+        [SerializeField]
+        private TypeConfig[] _typeConfig;
     }
 }

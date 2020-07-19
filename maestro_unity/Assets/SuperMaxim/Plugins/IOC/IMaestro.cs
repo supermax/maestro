@@ -1,9 +1,16 @@
+using System;
+using SuperMaxim.IOC.Container;
+
 namespace SuperMaxim.IOC
 {
-    public interface IMaestro
+    public interface IMaestro : IDisposable
     {
-        // TODO implement
-
-        T Resolve<T>() where T : class;
+        ITypeMapResolver Get<T>();
+        
+        ITypeMap Map<T>();
+        
+        ITypeMapReset UnMap<T>();
+        
+        void Reset<T>();
     }
 }

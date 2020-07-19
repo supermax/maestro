@@ -12,9 +12,13 @@ namespace SuperMaxim.IOC.Config
         [SerializeField]
         private System.Reflection.TypeDelegator _type;
 
-        public Type TargetType { get; set; }
+        public Type SourceType { get; set; }
+        
+        public Type[] TypeMappings { get; set; }
         
         public Type[] Dependencies { get; set; }
+        
+        public TypeInitTrigger InitTrigger { get; set; }
 
         public TypeConfig()
         {

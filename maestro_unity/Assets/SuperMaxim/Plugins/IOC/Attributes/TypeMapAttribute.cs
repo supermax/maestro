@@ -1,4 +1,5 @@
 using System;
+using SuperMaxim.IOC.Config;
 
 namespace SuperMaxim.IOC.Attributes
 {
@@ -8,7 +9,7 @@ namespace SuperMaxim.IOC.Attributes
     {
         public bool IsSingleton { get; set; }
         
-        public bool IsLazy { get; set; }
+        public TypeInitTrigger InitTrigger { get; set; }
         
         public Type[] MapTypes { get; set; }
     }
