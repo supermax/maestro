@@ -1,11 +1,11 @@
 namespace SuperMaxim.IOC.Container
 {
-    public interface ITypeMapReset
+    public interface ITypeMapReset<in T>
     {
-        ITypeMap From<T>(string key = null);
+        ITypeMapReset<T> From<TM>(string key = null) where TM : T;
 
-        ITypeMap Singleton<T>(string key = null);
+        ITypeMapReset<T> Singleton(string key = null);
         
-        ITypeMap Singleton<T>(T instance, string key = null);
+        ITypeMapReset<T> Singleton(T instance, string key = null);
     }
 }

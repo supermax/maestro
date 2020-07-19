@@ -18,17 +18,17 @@ namespace SuperMaxim.IOC
         {
         }
         
-        public ITypeMapResolver Get<T>()
+        public ITypeMapResolver<T> Get<T>()
         {
             throw new NotImplementedException();
         }
 
-        public ITypeMap Map<T>()
+        public ITypeMap<T> Map<T>()
         {
             throw new NotImplementedException();
         }
 
-        public ITypeMapReset UnMap<T>()
+        public ITypeMapReset<T> UnMap<T>()
         {
             throw new NotImplementedException();
         }

@@ -1,11 +1,11 @@
 namespace SuperMaxim.IOC.Container
 {
-    public interface ITypeMap
+    public interface ITypeMap<in T>
     {
-        ITypeMap To<T>(string key = null);
+        ITypeMap<T> To<TM>(string key = null) where TM : T;
 
-        ITypeMap Singleton<T>(string key = null);
+        ITypeMap<T> Singleton<TM>(string key = null) where TM : T;
         
-        ITypeMap Singleton<T>(T instance, string key = null);
+        ITypeMap<T> Singleton<TM>(T instance, string key = null) where TM : T;
     }
 }

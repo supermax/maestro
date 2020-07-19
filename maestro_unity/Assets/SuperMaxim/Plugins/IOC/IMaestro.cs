@@ -5,11 +5,11 @@ namespace SuperMaxim.IOC
 {
     public interface IMaestro : IDisposable
     {
-        ITypeMapResolver Get<T>();
+        ITypeMapResolver<T> Get<T>();
         
-        ITypeMap Map<T>();
+        ITypeMap<T> Map<T>();
         
-        ITypeMapReset UnMap<T>();
+        ITypeMapReset<T> UnMap<T>();
         
         void Reset<T>();
     }

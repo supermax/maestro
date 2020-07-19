@@ -1,9 +1,9 @@
 namespace SuperMaxim.IOC.Container
 {
-    public interface ITypeMapResolver
+    public interface ITypeMapResolver<T>
     {
-        T Instance<T>(string key = null, params object[] args);
+        T Instance(string key = null, params object[] args);
 
-        T Inject<T>(T instance, params object[] args);
+        T Inject(T instance, params object[] args);
     }
 }

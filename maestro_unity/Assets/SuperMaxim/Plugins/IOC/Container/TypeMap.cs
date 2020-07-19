@@ -7,7 +7,7 @@ namespace SuperMaxim.IOC.Container
     // TODO add mapType and instance fields for single-mapping and use dic for multi-mapping
     // TODO dispose upon removal from cache
     // TODO refer to TypeMapAttr and to InitTrigger during mapping
-    internal class TypeMap : ITypeMap, ITypeMapResolver, ITypeMapReset, IDisposable
+    internal class TypeMap<T> : ITypeMap<T>, ITypeMapResolver<T>, ITypeMapReset<T>, IDisposable
     {
         private bool _isSingleton;
         
@@ -24,9 +24,10 @@ namespace SuperMaxim.IOC.Container
             _instances = new ConcurrentDictionary<string, object>();
         }
         
-        public ITypeMap To<T>(string key = null)
+        public ITypeMap<T> To<TM>(string key = null) where TM : T
         {
-            var type = typeof(T);
+            // TODO check if TM is interface
+            var type = typeof(TM);
             if (key != null)
             {
                 _mapTypes[key] = type;
@@ -37,21 +38,31 @@ namespace SuperMaxim.IOC.Container
             return this;
         }
 
-        public ITypeMap From<T>(string key = null)
+        public ITypeMapReset<T> From<TM>(string key = null) where TM : T
         {
             throw new NotImplementedException();
         }
 
-        public ITypeMap Singleton<T>(string key = null)
+        ITypeMapReset<T> ITypeMapReset<T>.Singleton(string key)
         {
-            To<T>(key);
+            throw new NotImplementedException();
+        }
+
+        ITypeMapReset<T> ITypeMapReset<T>.Singleton(T instance, string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ITypeMap<T> Singleton<TM>(string key = null) where TM : T
+        {
+            To<TM>(key);
             _isSingleton = true;
             return this;
         }
 
-        public ITypeMap Singleton<T>(T instance, string key = null)
+        public ITypeMap<T> Singleton<TM>(T instance, string key = null) where TM : T
         {
-            Singleton<T>(key);
+            Singleton<TM>(key);
             var type = typeof(T);
             if (key != null)
             {
@@ -63,12 +74,12 @@ namespace SuperMaxim.IOC.Container
             return this;
         }
 
-        public T Instance<T>(string key = null, params object[] args)
+        public T Instance(string key = null, params object[] args)
         {
             T instance = default;
             if (!_isSingleton)
             {
-                instance = Resolve<T>();
+                instance = Resolve();
                 return instance;
             }
             
@@ -86,12 +97,12 @@ namespace SuperMaxim.IOC.Container
             return instance;
         }
         
-        public T Inject<T>(T instance, params object[] args)
+        public T Inject(T instance, params object[] args)
         {
             throw new NotImplementedException();
         }
 
-        private T Resolve<T>()
+        private T Resolve()
         {
             throw new NotImplementedException();
         }
