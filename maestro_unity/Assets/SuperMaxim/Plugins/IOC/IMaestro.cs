@@ -3,7 +3,7 @@ using SuperMaxim.IOC.Container;
 
 namespace SuperMaxim.IOC
 {
-    public interface IMaestro : IDisposable
+    public interface IMaestro
     {
         ITypeMapResolver<T> Get<T>();
         
@@ -11,6 +11,6 @@ namespace SuperMaxim.IOC
         
         ITypeMapReset<T> UnMap<T>();
         
-        void Reset<T>();
+        void UnMapAll<T>();
     }
 }

@@ -8,11 +8,13 @@ using SuperMaxim.IOC.Extensions;
 
 namespace SuperMaxim.IOC
 {
-    public sealed class Maestro : IMaestro
+    public sealed class Maestro : IMaestro, IDisposable
     {
         private static readonly Maestro DefaultInstance = new Maestro();
 
         public static IMaestro Default => DefaultInstance;
+        
+        private readonly TypeMapCache _cache = new TypeMapCache();
 
         private Maestro()
         {
@@ -20,27 +22,30 @@ namespace SuperMaxim.IOC
         
         public ITypeMapResolver<T> Get<T>()
         {
-            throw new NotImplementedException();
+            var map = _cache.Get<T>() as ITypeMapResolver<T>;
+            return map;
         }
 
         public ITypeMap<T> Map<T>()
         {
-            throw new NotImplementedException();
+           var map = _cache.Set<T>();
+           return map;
         }
 
         public ITypeMapReset<T> UnMap<T>()
         {
-            throw new NotImplementedException();
+            var map = _cache.Get<T>() as ITypeMapReset<T>;
+            return map;
         }
 
-        public void Reset<T>()
+        public void UnMapAll<T>()
         {
-            throw new NotImplementedException();
+            _cache.Remove<T>();
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _cache.Reset();
         }
     }
 }

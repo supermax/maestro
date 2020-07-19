@@ -8,4 +8,9 @@ namespace SuperMaxim.IOC.Container
         
         ITypeMap<T> Singleton<TM>(T instance, string key = null) where TM : T;
     }
+
+    internal interface ITypeMap
+    {
+        
+    }
 }

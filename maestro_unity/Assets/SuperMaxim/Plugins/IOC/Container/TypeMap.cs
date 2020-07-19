@@ -7,21 +7,18 @@ namespace SuperMaxim.IOC.Container
     // TODO add mapType and instance fields for single-mapping and use dic for multi-mapping
     // TODO dispose upon removal from cache
     // TODO refer to TypeMapAttr and to InitTrigger during mapping
-    internal class TypeMap<T> : ITypeMap<T>, ITypeMapResolver<T>, ITypeMapReset<T>, IDisposable
+    internal class TypeMap<T> : ITypeMap, ITypeMap<T>, ITypeMapResolver<T>, ITypeMapReset<T>, IDisposable
     {
         private bool _isSingleton;
         
-        private Type _keyType;
-
         private IDictionary<string, Type> _mapTypes;
 
-        private IDictionary<string, object> _instances;
+        private IDictionary<string, T> _instances;
 
-        public TypeMap(Type keyType)
+        internal TypeMap()
         {
-            _keyType = keyType;
             _mapTypes = new ConcurrentDictionary<string, Type>();
-            _instances = new ConcurrentDictionary<string, object>();
+            _instances = new ConcurrentDictionary<string, T>();
         }
         
         public ITypeMap<T> To<TM>(string key = null) where TM : T
@@ -40,17 +37,30 @@ namespace SuperMaxim.IOC.Container
 
         public ITypeMapReset<T> From<TM>(string key = null) where TM : T
         {
-            throw new NotImplementedException();
+            // TODO check if TM is interface
+            var type = typeof(TM);
+            if (key != null)
+            {
+                _mapTypes.Remove(key);
+                return this;
+            }
+            key = type.Name;
+            _mapTypes.Remove(key);
+            return this;
         }
 
-        ITypeMapReset<T> ITypeMapReset<T>.Singleton(string key)
+        public ITypeMapReset<T> From<TM>(T instance, string key = null) where TM : T
         {
-            throw new NotImplementedException();
-        }
-
-        ITypeMapReset<T> ITypeMapReset<T>.Singleton(T instance, string key)
-        {
-            throw new NotImplementedException();
+            // TODO check if TM is interface
+            var type = typeof(TM);
+            if (key != null)
+            {
+                _instances.Remove(key);
+                return this;
+            }
+            key = type.Name;
+            _instances.Remove(key);
+            return this;
         }
 
         public ITypeMap<T> Singleton<TM>(string key = null) where TM : T
@@ -66,11 +76,11 @@ namespace SuperMaxim.IOC.Container
             var type = typeof(T);
             if (key != null)
             {
-                _instances[key] = type;
+                _instances[key] = instance;
                 return this;
             }
             key = type.Name;
-            _instances[key] = type;
+            _instances[key] = instance;
             return this;
         }
 
@@ -109,8 +119,6 @@ namespace SuperMaxim.IOC.Container
 
         public void Dispose()
         {
-            _keyType = null;
-            
             _mapTypes?.Clear();
             _mapTypes = null;
             

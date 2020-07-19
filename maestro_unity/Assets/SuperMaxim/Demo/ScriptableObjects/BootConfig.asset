@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6dec164d58644978dc50206efe7f2f5, type: 3}
   m_Name: BootConfig
   m_EditorClassIdentifier: 
-  _typeConfig: []
+  _assemblyConfig:
+  - _typeConfig: []

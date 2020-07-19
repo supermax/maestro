@@ -10,6 +10,6 @@ namespace SuperMaxim.IOC.Config
     {
         // TODO implement
 
-        [SerializeField] private AssemblyConfig _assemblyConfig;
+        [SerializeField] private AssemblyConfig[] _assemblyConfig;
     }
 }
