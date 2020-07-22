@@ -70,7 +70,7 @@ namespace SuperMaxim.IOC.Container
             return this;
         }
 
-        public ITypeMap<T> Singleton<TM>(T instance, string key = null) where TM : T
+        public ITypeMap<T> Singleton<TM>(TM instance, string key = null) where TM : T
         {
             Singleton<TM>(key);
             var type = typeof(T);
@@ -87,34 +87,39 @@ namespace SuperMaxim.IOC.Container
         public T Instance(string key = null, params object[] args)
         {
             T instance = default;
+            if (key == null)
+            {
+                var type = typeof(T);
+                key = type.Name;
+            }
+
             if (!_isSingleton)
             {
-                instance = Resolve();
+                instance = Resolve(key, args);
                 return instance;
             }
             
-            var type = typeof(T);
-            if (key != null)
+            if (_instances.ContainsKey(key))
             {
-                if (_instances.ContainsKey(key))
-                {
-                    instance = (T)_instances[key];
-                }
+                instance = _instances[key];
                 return instance;
             }
-            key = type.Name;
-            instance = (T)_instances[key];
+                
+            instance = Resolve(key, args);
+            _instances[key] = instance;
             return instance;
         }
         
         public T Inject(T instance, params object[] args)
         {
-            throw new NotImplementedException();
+            // TODO implement
+            return default;
         }
 
-        private T Resolve()
+        private T Resolve(string key = null, params object[] args)
         {
-            throw new NotImplementedException();
+            // TODO implement
+            return default;
         }
 
         public void Dispose()

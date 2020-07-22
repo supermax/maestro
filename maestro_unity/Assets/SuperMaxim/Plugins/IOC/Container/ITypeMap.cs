@@ -1,3 +1,5 @@
+using System;
+
 namespace SuperMaxim.IOC.Container
 {
     public interface ITypeMap<in T>
@@ -6,10 +8,10 @@ namespace SuperMaxim.IOC.Container
 
         ITypeMap<T> Singleton<TM>(string key = null) where TM : T;
         
-        ITypeMap<T> Singleton<TM>(T instance, string key = null) where TM : T;
+        ITypeMap<T> Singleton<TM>(TM instance, string key = null) where TM : T;
     }
 
-    internal interface ITypeMap
+    internal interface ITypeMap : IDisposable
     {
         
     }

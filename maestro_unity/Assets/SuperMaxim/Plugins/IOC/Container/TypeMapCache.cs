@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using SuperMaxim.Core.Extensions;
 
 namespace SuperMaxim.IOC.Container
 {
@@ -31,14 +32,17 @@ namespace SuperMaxim.IOC.Container
             var type = typeof(T);
             if (!_cache.ContainsKey(type))
             {
-                // TODO write to log
                 return;
             }
+
+            var map = _cache[type];
             _cache.Remove(type);
+            map.Dispose();
         }
 
         internal void Reset()
         {
+            _cache.ForEach(map => map.Value.Dispose());
             _cache.Clear();
         }
     }
