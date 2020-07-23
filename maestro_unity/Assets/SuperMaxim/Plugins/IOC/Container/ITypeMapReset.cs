@@ -4,6 +4,6 @@ namespace SuperMaxim.IOC.Container
     {
         ITypeMapReset<T> From<TM>(string key = null) where TM : class, T;
 
-        ITypeMapReset<T> From<TM>(T instance, string key = null) where TM : class, T;
+        ITypeMapReset<T> From<TM>(TM instance, string key = null) where TM : class, T;
     }
 }

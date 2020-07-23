@@ -10,9 +10,13 @@ namespace SuperMaxim.IOC.Container
     internal class TypeMap<T> : ITypeMap, ITypeMap<T>, ITypeMapResolver<T>, ITypeMapReset<T>, IDisposable
     {
         private bool _isSingleton;
+
+        private string _defaultMapTypeKey;
         
         private IDictionary<string, Type> _mapTypes;
 
+        private string _defaultInstanceKey;
+        
         private IDictionary<string, T> _instances;
 
         internal TypeMap()
@@ -28,12 +32,14 @@ namespace SuperMaxim.IOC.Container
             {
                 throw new OperationCanceledException($"The type {type} is not a class!");
             }
-            if (key != null)
+            if (key == null)
             {
-                _mapTypes[key] = type;
-                return this;
+                key = type.Name;
             }
-            key = type.Name;
+            if (_defaultMapTypeKey == null)
+            {
+                _defaultMapTypeKey = key;
+            }
             _mapTypes[key] = type;
             return this;
         }
@@ -45,30 +51,34 @@ namespace SuperMaxim.IOC.Container
             {
                 throw new OperationCanceledException($"The type {type} is not a class!");
             }
-            if (key != null)
+            if (key == null)
             {
-                _mapTypes.Remove(key);
-                return this;
+                key = type.Name;
             }
-            key = type.Name;
             _mapTypes.Remove(key);
+            if (_defaultMapTypeKey == key)
+            {
+                _defaultMapTypeKey = null;
+            }
             return this;
         }
 
-        public ITypeMapReset<T> From<TM>(T instance, string key = null) where TM : class, T
+        public ITypeMapReset<T> From<TM>(TM instance, string key = null) where TM : class, T
         {
             var type = typeof(TM);
             if (!type.IsClass)
             {
                 throw new OperationCanceledException($"The type {type} is not a class!");
             }
-            if (key != null)
+            if (key == null)
             {
-                _instances.Remove(key);
-                return this;
+                key = type.Name;
             }
-            key = type.Name;
             _instances.Remove(key);
+            if (_defaultInstanceKey == key)
+            {
+                _defaultInstanceKey = null;
+            }
             return this;
         }
 
@@ -82,13 +92,12 @@ namespace SuperMaxim.IOC.Container
         public ITypeMap<T> Singleton<TM>(TM instance, string key = null) where TM : class, T
         {
             Singleton<TM>(key);
-            var type = typeof(T);
-            if (key != null)
+            var type = typeof(TM);
+            if (key == null)
             {
-                _instances[key] = instance;
-                return this;
+                key = type.Name;
             }
-            key = type.Name;
+            _defaultInstanceKey = key;
             _instances[key] = instance;
             return this;
         }
@@ -96,24 +105,22 @@ namespace SuperMaxim.IOC.Container
         public T Instance(string key = null, params object[] args)
         {
             T instance;
-            if (key == null)
-            {
-                var type = typeof(T);
-                key = type.Name;
-            }
-
             if (!_isSingleton)
             {
-                instance = Resolve(key, args);
+                instance = Resolve(key ?? _defaultMapTypeKey, args);
                 return instance;
             }
-            
+
+            if (key == null)
+            {
+                key = _defaultInstanceKey;
+            }
             if (_instances.ContainsKey(key))
             {
                 instance = _instances[key];
                 return instance;
             }
-                
+            
             instance = Resolve(key, args);
             _instances[key] = instance;
             return instance;
@@ -127,6 +134,10 @@ namespace SuperMaxim.IOC.Container
 
         private T Resolve(string key = null, params object[] args)
         {
+            if (key == null)
+            {
+                key = _defaultMapTypeKey;
+            }
             if (key == null)
             {
                 var type = typeof(T);
@@ -147,9 +158,11 @@ namespace SuperMaxim.IOC.Container
         {
             _mapTypes?.Clear();
             _mapTypes = null;
+            _defaultMapTypeKey = null;
             
             _instances?.Clear();
             _instances = null;
+            _defaultInstanceKey = null;
         }
     }
 }
