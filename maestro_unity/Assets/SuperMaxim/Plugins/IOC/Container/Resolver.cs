@@ -10,19 +10,16 @@ namespace SuperMaxim.IOC.Container
     internal static class Resolver
     {
         // TODO split into short methods
+        // TODO use args
         internal static object Resolve(Type src, object[] args, List<Type> dependencies)
         {
             if (src == null)
             {
                 throw new ArgumentNullException(nameof(src));
             }
-            if (src.IsAbstract)
+            if (!src.IsClass)
             {
-                throw new OperationCanceledException($"The {src} is an abstract class");
-            }
-            if (src.IsInterface)
-            {
-                throw new OperationCanceledException($"The {src} is an interface");
+                throw new OperationCanceledException($"The {src} is not a class!");
             }
 
             var mapAtt = src.GetCustomAttribute<TypeMapAttribute>();
@@ -51,7 +48,7 @@ namespace SuperMaxim.IOC.Container
             var ctor = src.GetDefaultConstructor();
             if (ctor == null)
             {
-                throw new OperationCanceledException($"Cannot get default constructor for {src}");
+                throw new OperationCanceledException($"Cannot get constructor for {src}");
             }
 
             object instance = null;
@@ -90,27 +87,29 @@ namespace SuperMaxim.IOC.Container
             }
 
             var methods = src.GetExecutableMethods();
-            if (!methods.IsNullOrEmpty())
+            if (methods.IsNullOrEmpty())
             {
-                foreach (var method in methods)
+                return instance;
+            }
+            
+            foreach (var method in methods)
+            {
+                var methodParams = method.GetParameters();
+                if (!methodParams.IsNullOrEmpty())
                 {
-                    var methodParams = method.GetParameters();
-                    if (!methodParams.IsNullOrEmpty())
+                    var methodParamsAry = new object[methodParams.Length];
+                    for (var i = 0; i < methodParams.Length; i++)
                     {
-                        var methodParamsAry = new object[methodParams.Length];
-                        for (var i = 0; i < methodParams.Length; i++)
-                        {
-                            var methodParam = methodParams[i];
-                            var paramType = methodParam.ParameterType;
-                            var paramInstance = Resolve(paramType, args, dependencies);
-                            methodParamsAry[i] = paramInstance;
-                        }
-                        method.Invoke(instance, methodParamsAry);
+                        var methodParam = methodParams[i];
+                        var paramType = methodParam.ParameterType;
+                        var paramInstance = Resolve(paramType, args, dependencies);
+                        methodParamsAry[i] = paramInstance;
                     }
-                    else
-                    {
-                        method.Invoke(instance, null);
-                    }
+                    method.Invoke(instance, methodParamsAry);
+                }
+                else
+                {
+                    method.Invoke(instance, null);
                 }
             }
             return instance;

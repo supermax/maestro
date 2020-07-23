@@ -10,9 +10,14 @@ namespace SuperMaxim.Demo
     {
         private void Start()
         {
-            Maestro.Default.Map<IEnemy>().To<Witch>();
+            var map = Maestro.Default.Map<IEnemy>().To<Witch>();
+            Debug.Log(map);
 
-            Maestro.Default.UnMap<IEnemy>().From<Witch>();
+            var instance = Maestro.Default.Get<IEnemy>().Instance();
+            Debug.Log(instance);
+
+            var unmap = Maestro.Default.UnMap<IEnemy>().From<Witch>();
+            Debug.Log(unmap);
         }
     }
 }
