@@ -7,7 +7,7 @@ namespace SuperMaxim.IOC.Container
     // TODO add mapType and instance fields for single-mapping and use dic for multi-mapping
     // TODO dispose upon removal from cache
     // TODO refer to TypeMapAttr and to InitTrigger during mapping
-    internal class TypeMap<T> : ITypeMap, ITypeMap<T>, ITypeMapResolver<T>, ITypeMapReset<T>, IDisposable
+    internal class TypeMap<T> : ITypeMap, ITypeMap<T>, ITypeMapResolver<T>, ITypeMapReset<T>
     {
         private bool _isSingleton;
 
@@ -163,6 +163,11 @@ namespace SuperMaxim.IOC.Container
             _instances?.Clear();
             _instances = null;
             _defaultInstanceKey = null;
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(TypeMap<T>)}<{typeof(T).Name}>";
         }
     }
 }

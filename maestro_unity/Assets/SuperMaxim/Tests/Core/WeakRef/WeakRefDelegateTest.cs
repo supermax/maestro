@@ -9,12 +9,6 @@ namespace SuperMaxim.Tests.Core.WeakRef
 {
     public class WeakRefDelegateTest
     {
-        [OneTimeSetUp]
-        public void Init()
-        {
-            // TODO
-        }
-
         [UnityTest]
         public IEnumerator TestVoidCallbackWithEnumerator()
         {
