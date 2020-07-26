@@ -37,11 +37,13 @@ namespace SuperMaxim.Editor.Tests
         }
 
         [Test]
-        public void Maestro_Get_Instance_Test()
+        public void Maestro_Get_DefaultInstance_Test()
         {
             var defaultAnimalInstance = Maestro.Default.Get<IAnimal>().Instance();
-            Debug.Log($"test {nameof(Maestro_Get_Instance_Test)}<{nameof(IAnimal)}> result {defaultAnimalInstance}");
+            Debug.Log($"test {nameof(Maestro_Get_DefaultInstance_Test)}<{nameof(IAnimal)}> result {defaultAnimalInstance}");
             Assert.NotNull(defaultAnimalInstance, $"failed to Get<{nameof(IAnimal)}>.Instance()");
+            Assert.IsTrue(defaultAnimalInstance.GetType() == typeof(Dog), 
+                $"failed to Get<{nameof(IAnimal)}>.Instance() as default instance of {nameof(Dog)}");
         }
     }
 }
