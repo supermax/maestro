@@ -19,7 +19,7 @@ namespace SuperMaxim.Core.WeakRef
         {
             get
             {
-                var isAlive = _ref == null || (_ref.IsAlive && _ref.Target != null);
+                var isAlive = _ref == null || _ref.IsAlive && _ref.Target != null;
                 return isAlive;
             }
         }

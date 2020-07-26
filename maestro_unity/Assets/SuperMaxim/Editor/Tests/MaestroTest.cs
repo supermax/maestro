@@ -35,5 +35,13 @@ namespace SuperMaxim.Editor.Tests
             Debug.Log($"test {nameof(Maestro_Get_Test)}<{typeof(T).Name}> result {result}");
             Assert.NotNull(result, $"failed to Get<{typeof(T).Name}>");
         }
+
+        [Test]
+        public void Maestro_Get_Instance_Test()
+        {
+            var defaultAnimalInstance = Maestro.Default.Get<IAnimal>().Instance();
+            Debug.Log($"test {nameof(Maestro_Get_Instance_Test)}<{nameof(IAnimal)}> result {defaultAnimalInstance}");
+            Assert.NotNull(defaultAnimalInstance, $"failed to Get<{nameof(IAnimal)}>.Instance()");
+        }
     }
 }

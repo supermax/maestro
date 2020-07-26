@@ -19,6 +19,8 @@ namespace SuperMaxim.IOC.Config
         public Type[] Dependencies { get; set; }
         
         public TypeInitTrigger InitTrigger { get; set; }
+        
+        public bool IsSingleton { get; set; }
 
         public TypeConfig()
         {
