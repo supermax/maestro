@@ -9,17 +9,35 @@ namespace SuperMaxim.Editor.Tests
 {
     public class MaestroTest
     {
-        [SetUp]
-        public void Map()
+        [Test]
+        [Order(0)]
+        public void Maestro_Map_Test()
         {
-            Maestro.Default.Map<IAnimal>().To<Dog>("dog").To<Carp>("fish").Singleton(new Cat());
+            var animal = Maestro.Default
+                                            .Map<IAnimal>()
+                                            .To<Dog>("dog")
+                                            .To<Carp>("fish")
+                                            .Singleton(new Cat());
+            Debug.Log($"test {nameof(Maestro_Map_Test)}<{nameof(IAnimal)}> result {animal}");
+            Assert.NotNull(animal, $"failed to Map<{nameof(IAnimal)}>");
             
-            Maestro.Default.Map<Mammal>().To<Dog>().To<Cat>();
+            var mammal = Maestro.Default
+                                                .Map<Mammal>()
+                                                .To<Dog>()
+                                                .To<Cat>();
+            Debug.Log($"test {nameof(Maestro_Map_Test)}<{nameof(Mammal)}> result {mammal}");
+            Assert.NotNull(animal, $"failed to Map<{nameof(Mammal)}>");
 
-            Maestro.Default.Map<Fish>().Singleton<Shark>("jaws").To<Carp>("fishy");
+            var fish = Maestro.Default
+                                        .Map<Fish>()
+                                        .Singleton<Shark>("jaws")
+                                        .To<Carp>("fishy");
+            Debug.Log($"test {nameof(Maestro_Map_Test)}<{nameof(Fish)}> result {fish}");
+            Assert.NotNull(fish, $"failed to Map<{nameof(Fish)}>");
         }
 
         [Test]
+        [Order(1)]
         public void Maestro_Get_Test()
         {
             Maestro_Get_Test<IAnimal>();
@@ -37,6 +55,7 @@ namespace SuperMaxim.Editor.Tests
         }
 
         [Test]
+        [Order(2)]
         public void Maestro_Get_DefaultInstance_Test()
         {
             var defaultAnimalInstance = Maestro.Default.Get<IAnimal>().Instance();
