@@ -47,13 +47,6 @@ namespace SuperMaxim.Editor.Tests
             Maestro_Get_Test<Fish>();
         }
 
-        private static void Maestro_Get_Test<T>()
-        {
-            var result = Maestro.Default.Get<T>();
-            Debug.Log($"test {nameof(Maestro_Get_Test)}<{typeof(T).Name}> result {result}");
-            Assert.NotNull(result, $"failed to Get<{typeof(T).Name}>");
-        }
-
         [Test]
         [Order(2)]
         public void Maestro_Get_Instance_Test()
@@ -64,12 +57,33 @@ namespace SuperMaxim.Editor.Tests
             
             Maestro_Get_Instance_Test<Fish>();
         }
-
-        private static void Maestro_Get_Instance_Test<T>()
+        
+        [Test]
+        [Order(3)]
+        public void Maestro_Get_Specific_Instance_Test()
         {
-            var instance = Maestro.Default.Get<T>().Instance();
-            Debug.Log($"test {nameof(Maestro_Get_Instance_Test)}<{typeof(T).Name}> result {instance}");
-            Assert.NotNull(instance, $"failed to Get<{nameof(T)}>.Instance()");
+            Maestro_Get_Instance_Test<IAnimal>("dog");
+            Maestro_Get_Instance_Test<IAnimal>("fish");
+            
+            Maestro_Get_Instance_Test<Mammal>("Dog");
+            Maestro_Get_Instance_Test<Mammal>("Cat");
+            
+            Maestro_Get_Instance_Test<Fish>("jaws");
+            Maestro_Get_Instance_Test<Fish>("fishy");
+        }
+
+        private static void Maestro_Get_Instance_Test<T>(string key = null)
+        {
+            var instance = Maestro.Default.Get<T>().Instance(key);
+            Debug.Log($"test {nameof(Maestro_Get_Instance_Test)}<{typeof(T).Name}>({key}) result {instance}");
+            Assert.NotNull(instance, $"failed to Get<{nameof(T)}>.Instance({key})");
+        }
+        
+        private static void Maestro_Get_Test<T>()
+        {
+            var result = Maestro.Default.Get<T>();
+            Debug.Log($"test {nameof(Maestro_Get_Test)}<{typeof(T).Name}> result {result}");
+            Assert.NotNull(result, $"failed to Get<{typeof(T).Name}>");
         }
     }
 }
