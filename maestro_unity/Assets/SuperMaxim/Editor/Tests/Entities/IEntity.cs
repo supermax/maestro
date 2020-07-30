@@ -1,4 +1,6 @@
-﻿namespace SuperMaxim.Editor.Tests.Entities
+﻿using SuperMaxim.IOC.Attributes;
+
+namespace SuperMaxim.Editor.Tests.Entities
 {
     public interface IAnimal
     {
@@ -17,7 +19,8 @@
 
     public class Dog : Mammal
     {
-        
+        [Inject]
+        public IFood Food { get; set; }
     }
 
     public class Cat : Mammal
@@ -32,10 +35,21 @@
 
     public class Shark : Fish
     {
-        
+        [Inject]
+        public IFood Food { get; set; }
     }
 
     public class Carp : Fish
+    {
+        
+    }
+
+    public interface IFood
+    {
+        
+    }
+
+    public class Food : IFood
     {
         
     }

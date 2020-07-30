@@ -13,6 +13,12 @@ namespace SuperMaxim.Editor.Tests
         [Order(0)]
         public void Maestro_Map_Test()
         {
+            var food = Maestro.Default
+                                            .Map<IFood>()
+                                            .To<Food>();
+            Debug.Log($"test {nameof(Maestro_Map_Test)}<{nameof(IFood)}> result {food}");
+            Assert.NotNull(food, $"failed to Map<{nameof(IFood)}>");
+            
             var animal = Maestro.Default
                                             .Map<IAnimal>()
                                             .To<Dog>("dog")
@@ -70,6 +76,15 @@ namespace SuperMaxim.Editor.Tests
             
             Maestro_Get_Instance_Test<Fish>("jaws");
             Maestro_Get_Instance_Test<Fish>("fishy");
+        }
+
+        [Test]
+        [Order(4)]
+        public void Maestro_Injectable_Properties_Test()
+        {
+            var dog = Maestro.Default.Get<IAnimal>().Instance("dog") as Dog;
+            Debug.Log($"test {nameof(Maestro_Injectable_Properties_Test)}<{nameof(IAnimal)}>(\"dog\").Food = {dog?.Food}");
+            Assert.NotNull(dog?.Food, $"failed to Get<{nameof(IAnimal)}>.Instance(\"dog\")");
         }
 
         private static void Maestro_Get_Instance_Test<T>(string key = null)
