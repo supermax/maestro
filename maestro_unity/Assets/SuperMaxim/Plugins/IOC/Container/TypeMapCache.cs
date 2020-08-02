@@ -22,7 +22,7 @@ namespace SuperMaxim.IOC.Container
 
         internal ITypeMap<T> Set<T>()
         {
-            var map = new TypeMap<T>();
+            var map = new TypeMap<T>(_cache);
             _cache[typeof(T)] = map;
             return map;
         }
