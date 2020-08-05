@@ -8,6 +8,13 @@ namespace SuperMaxim.IOC.Container
     internal class TypeMapCache
     {
         private readonly IDictionary<Type, ITypeMap> _cache = new ConcurrentDictionary<Type, ITypeMap>();
+        
+        private readonly IResolver _resolver;
+
+        internal TypeMapCache()
+        {
+            _resolver = new Resolver(_cache);
+        }
 
         internal ITypeMap<T> Get<T>()
         {
@@ -22,7 +29,7 @@ namespace SuperMaxim.IOC.Container
 
         internal ITypeMap<T> Set<T>()
         {
-            var map = new TypeMap<T>(_cache);
+            var map = new TypeMap<T>(_resolver);
             _cache[typeof(T)] = map;
             return map;
         }
