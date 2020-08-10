@@ -2,24 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using SuperMaxim.Core.Extensions;
+using SuperMaxim.Core.Objects;
 using SuperMaxim.IOC.Attributes;
 using SuperMaxim.IOC.Container;
 using SuperMaxim.IOC.Extensions;
 
 namespace SuperMaxim.IOC
 {
-    public sealed class Maestro : IMaestro, IDisposable
+    public class Maestro : Singleton<IMaestro, Maestro>, IMaestro, IDisposable
     {
-        private static readonly Maestro DefaultInstance = new Maestro();
-
-        public static IMaestro Default => DefaultInstance;
-        
         private readonly TypeMapCache _cache = new TypeMapCache();
 
-        private Maestro()
-        {
-        }
-        
         public ITypeMapResolver<T> Get<T>()
         {
             var type = typeof(T);

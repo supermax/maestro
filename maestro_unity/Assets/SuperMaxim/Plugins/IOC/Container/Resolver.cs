@@ -36,10 +36,29 @@ namespace SuperMaxim.IOC.Container
                 throw new OperationCanceledException($"The {src} is not a class!");
             }
 
+            T instance;
             var mapAtt = src.GetCustomAttribute<TypeMapAttribute>();
             if (mapAtt != null && mapAtt.IsSingleton)
             {
-                // TODO get from cache and return
+                // TODO avoid cyclic loop _cache -> type map -> _cache
+                // var key = typeof(T);
+                // if (_cache.ContainsKey(key))
+                // {
+                //     if (_cache[key] is ITypeMapResolver<T> map)
+                //     { 
+                //         instance = map.Instance(args: args);
+                //         if (!Equals(instance, default))
+                //         {
+                //             return instance;
+                //         }
+                //     }
+                //     
+                //     map = _cache[src] as ITypeMapResolver<T>;
+                //     if (map != null)
+                //     {
+                //         
+                //     }
+                // }
                 return default;
             }
 
@@ -65,7 +84,6 @@ namespace SuperMaxim.IOC.Container
                 throw new OperationCanceledException($"Cannot get constructor for {src}");
             }
 
-            T instance;
             var ctorParams = ctor.GetParameters();
             if (ctorParams.IsNullOrEmpty())
             {
