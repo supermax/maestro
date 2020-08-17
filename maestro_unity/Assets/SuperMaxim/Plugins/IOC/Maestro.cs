@@ -13,7 +13,7 @@ namespace SuperMaxim.IOC
     {
         private readonly TypeMapCache _cache = new TypeMapCache();
 
-        public ITypeMapResolver<T> Get<T>()
+        public ITypeMapResolver<T> Get<T>() where T : class
         {
             var type = typeof(T);
             if (!type.IsClass && !type.IsInterface)
@@ -24,7 +24,7 @@ namespace SuperMaxim.IOC
             return map;
         }
 
-        public ITypeMap<T> Map<T>()
+        public ITypeMap<T> Map<T>() where T : class
         {
             var type = typeof(T);
             if (!type.IsClass && !type.IsInterface)
@@ -35,7 +35,7 @@ namespace SuperMaxim.IOC
             return map;
         }
 
-        public ITypeMapReset<T> UnMap<T>()
+        public ITypeMapReset<T> UnMap<T>() where T : class
         {
             var type = typeof(T);
             if (!type.IsClass && !type.IsInterface)
@@ -46,7 +46,7 @@ namespace SuperMaxim.IOC
             return map;
         }
 
-        public void UnMapAll<T>()
+        public void UnMapAll<T>() where T : class
         {
             var type = typeof(T);
             if (!type.IsClass && !type.IsInterface)

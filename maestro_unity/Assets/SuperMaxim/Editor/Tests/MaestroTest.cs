@@ -87,14 +87,14 @@ namespace SuperMaxim.Editor.Tests
             Assert.NotNull(dog?.Food, $"failed to Get<{nameof(IAnimal)}>.Instance(\"dog\")");
         }
 
-        private static void Maestro_Get_Instance_Test<T>(string key = null)
+        private static void Maestro_Get_Instance_Test<T>(string key = null) where T : class
         {
             var instance = Maestro.Default.Get<T>().Instance(key);
             Debug.Log($"test {nameof(Maestro_Get_Instance_Test)}<{typeof(T).Name}>({key}) result {instance}");
             Assert.NotNull(instance, $"failed to Get<{nameof(T)}>.Instance({key})");
         }
         
-        private static void Maestro_Get_Test<T>()
+        private static void Maestro_Get_Test<T>() where T : class
         {
             var result = Maestro.Default.Get<T>();
             Debug.Log($"test {nameof(Maestro_Get_Test)}<{typeof(T).Name}> result {result}");

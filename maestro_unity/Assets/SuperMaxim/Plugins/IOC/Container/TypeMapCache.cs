@@ -16,7 +16,7 @@ namespace SuperMaxim.IOC.Container
             _resolver = new Resolver(_cache);
         }
 
-        internal ITypeMap<T> Get<T>()
+        internal ITypeMap<T> Get<T>() where T : class
         {
             var type = typeof(T);
             if (!_cache.ContainsKey(type))
@@ -27,14 +27,14 @@ namespace SuperMaxim.IOC.Container
             return map as ITypeMap<T>;
         }
 
-        internal ITypeMap<T> Set<T>()
+        internal ITypeMap<T> Set<T>() where T : class
         {
             var map = new TypeMap<T>(_resolver);
             _cache[typeof(T)] = map;
             return map;
         }
 
-        internal void Remove<T>()
+        internal void Remove<T>() where T : class
         {
             var type = typeof(T);
             if (!_cache.ContainsKey(type))

@@ -1,6 +1,6 @@
 namespace SuperMaxim.IOC.Container
 {
-    public interface ITypeMapResolver<T>
+    public interface ITypeMapResolver<T> where T : class
     {
         T Instance(string key = null, params object[] args);
 

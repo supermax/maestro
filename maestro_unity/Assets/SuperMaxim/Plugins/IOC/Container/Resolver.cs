@@ -25,6 +25,7 @@ namespace SuperMaxim.IOC.Container
 
         // TODO split into short methods
         // TODO use args
+        // TODO move back to TypeMap?
         private T Resolve<T>(Type src, object[] args, ICollection<Type> dependencies)
         {
             if (src == null)

@@ -12,7 +12,7 @@ namespace SuperMaxim.IOC.Container
     // TODO dispose upon removal from cache
     // TODO refer to TypeMapAttr and to InitTrigger during mapping
     // TODO handle default keys (add/remove/update)
-    internal class TypeMap<T> : ITypeMap, ITypeMap<T>, ITypeMapResolver<T>, ITypeMapReset<T>
+    internal class TypeMap<T> : ITypeMap, ITypeMap<T>, ITypeMapResolver<T>, ITypeMapReset<T> where T : class
     {
         private string _defaultMapTypeKey;
         
@@ -40,12 +40,13 @@ namespace SuperMaxim.IOC.Container
             }
             if (key == null)
             {
-                key = type.Name;
+                key = type.FullName;
             }
             if (_defaultMapTypeKey == null)
             {
                 _defaultMapTypeKey = key;
             }
+            // TODO var mapAtt = src.GetCustomAttribute<TypeMapAttribute>();
             _mapTypes[key] = new TypeMapConfig {Type = type, IsSingleton = isSingleton};
             return this;
         }
@@ -64,7 +65,7 @@ namespace SuperMaxim.IOC.Container
             }
             if (key == null)
             {
-                key = type.Name;
+                key = type.FullName;
             }
             _mapTypes.Remove(key);
             if (_defaultMapTypeKey == key)
@@ -83,7 +84,7 @@ namespace SuperMaxim.IOC.Container
             }
             if (key == null)
             {
-                key = type.Name;
+                key = type.FullName;
             }
             _instances.Remove(key);
             if (_defaultInstanceKey == key)
@@ -103,7 +104,7 @@ namespace SuperMaxim.IOC.Container
             var type = typeof(TM);
             if (key == null)
             {
-                key = type.Name;
+                key = type.FullName;
             }
             _defaultInstanceKey = key;
             _instances[key] = instance;
@@ -113,28 +114,31 @@ namespace SuperMaxim.IOC.Container
         public T Instance(string key = null, params object[] args)
         {
             T instance;
-            key = key ?? _defaultMapTypeKey;
-            if (_mapTypes.ContainsKey(key))
+            var type = typeof(T);
+            var instanceKey = (key ?? _defaultInstanceKey) ?? type.FullName;
+            if (_instances.ContainsKey(instanceKey))
             {
-                if (_mapTypes[key].IsSingleton)
-                {
-                    instance = Resolve(key ?? _defaultMapTypeKey, args);
-                    return instance;
-                }
-            }
-
-            if (key == null)
-            {
-                key = _defaultInstanceKey;
-            }
-            if (_instances.ContainsKey(key))
-            {
-                instance = _instances[key];
+                instance = _instances[instanceKey];
                 return instance;
             }
             
-            instance = Resolve(key, args);
-            _instances[key] = instance;
+            var typeKey = (key ?? _defaultMapTypeKey) ?? type.FullName;
+            if (!_mapTypes.ContainsKey(typeKey))
+            {
+                MapType<T>(typeKey);
+            }
+            else
+            {
+                type = _mapTypes[typeKey].Type;
+            }
+            
+            instance = Resolve(type, args);
+            if (!_mapTypes[typeKey].IsSingleton)
+            {
+                return instance;
+            }
+            
+            _instances[typeKey] = instance;
             return instance;
         }
         
@@ -144,24 +148,9 @@ namespace SuperMaxim.IOC.Container
             return default;
         }
 
-        private T Resolve(string key = null, params object[] args)
+        private T Resolve(Type type, params object[] args)
         {
-            if (key == null)
-            {
-                key = _defaultMapTypeKey;
-            }
-            if (key == null)
-            {
-                var type = typeof(T);
-                key = type.Name;
-            }
-
-            var typeConfig = _mapTypes[key];
-            var instance = _resolver.Resolve<T>(typeConfig.Type, args);
-            if (typeConfig.IsSingleton)
-            {
-                _instances[key] = instance;
-            }
+            var instance = _resolver.Resolve<T>(type, args);
             return instance;
         }
         
@@ -180,7 +169,7 @@ namespace SuperMaxim.IOC.Container
 
         public override string ToString()
         {
-            return $"{nameof(TypeMap<T>)}<{typeof(T).Name}>";
+            return $"{nameof(TypeMap<T>)}<{typeof(T).FullName}>";
         }
     }
 }
