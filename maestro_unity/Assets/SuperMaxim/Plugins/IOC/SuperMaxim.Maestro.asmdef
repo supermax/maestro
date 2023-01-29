@@ -1,13 +1,18 @@
 {
     "name": "SuperMaxim.Maestro",
-    "references": [],
+    "rootNamespace": "",
+    "references": [
+        "GUID:ee384bc0ffb46466c82f392c21c26a6c"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }
