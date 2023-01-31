@@ -185,18 +185,13 @@ namespace SuperMaxim.IOC.Container
             return $"{nameof(TypeMap<T>)}<{typeof(T).FullName}>";
         }
 
-        public new Type GetType()
-        {
-            return typeof (T);
-        }
-
         Type ITypeMap.GetMappedType()
         {
             return _mapTypes[_defaultMapTypeKey].Type;
         }
 
         // TODO split into short methods
-        // TODO use args
+        // TODO use args param
         // TODO move back to TypeMap?
         private object Resolve(Type src, object[] args)
         {

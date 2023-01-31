@@ -5,6 +5,13 @@ using UnityEngine;
 
 namespace SuperMaxim.Editor.Tests
 {
+    /* TODO Add tests:
+        1) Singleton
+        2) Unmap
+        3) Reset
+        4) Dispose
+        5) All other APIs
+     */
     public class MaestroTest
     {
         [SetUp]
@@ -70,8 +77,8 @@ namespace SuperMaxim.Editor.Tests
             Maestro_Get_Instance_Test<IAnimal>("dog");
             Maestro_Get_Instance_Test<IAnimal>("fish");
 
-            Maestro_Get_Instance_Test<Mammal>("Dog");
-            Maestro_Get_Instance_Test<Mammal>("Cat");
+            Maestro_Get_Instance_Test<Mammal>(typeof(Dog).FullName);
+            Maestro_Get_Instance_Test<Mammal>(typeof(Cat).FullName);
 
             Maestro_Get_Instance_Test<Fish>("jaws");
             Maestro_Get_Instance_Test<Fish>("fishy");
