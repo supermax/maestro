@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/SuperMaxim/Demo/Scenes/DemoScene.unity
+    path: Assets/SuperMaxim/Demo/IOC/Scenes/MaestroDemoScene.unity
     guid: f5d6be0ce551c4267baa704fe445aa3e
   m_configObjects: {}

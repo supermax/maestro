@@ -1,6 +1,6 @@
 using System;
 
-namespace SuperMaxim.Core.Logging
+namespace SuperMaxim.Logging
 {
     public class ConsoleLoggerConfig : ILoggerConfig
     {

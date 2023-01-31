@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SuperMaxim.Core.Logging
+namespace SuperMaxim.Logging
 {
     public interface ILogger
     {

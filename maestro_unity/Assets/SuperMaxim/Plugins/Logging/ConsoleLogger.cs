@@ -1,26 +1,21 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
-namespace SuperMaxim.Core.Logging
+namespace SuperMaxim.Logging
 {
-    internal class DebugConsoleLogger : ILogger
+    internal class ConsoleLogger : ILogger
     {
         public ILoggerConfig Config { get; set; } = new ConsoleLoggerConfig();
 
         private const string LineSplitter = "/r/n";
 
-        private bool IsEnabled
-        {
-            get
-            {
-                return Config.IsEnabled;
-            }
-        }
+        private bool IsEnabled => Config.IsEnabled;
 
         public ILogger LogInfo(string message)
         {
             if (!IsEnabled) return this;
-            Console.WriteLine(message);
+            Debug.Log(message);
             return this;
         }
 
@@ -45,18 +40,18 @@ namespace SuperMaxim.Core.Logging
             msg = string.Format(format, msg);
             return LogInfo(msg);
         }
-        
+
         public ILogger LogInfo(string format, params object[] messages)
         {
             if (!IsEnabled) return this;
-            Console.WriteLine(format, messages);
+            Debug.LogFormat(format, messages);
             return this;
         }
 
         public ILogger LogWarning(string message)
         {
             if (!IsEnabled) return this;
-            Console.WriteLine(message);
+            Debug.LogWarning(message);
             return this;
         }
 
@@ -85,14 +80,14 @@ namespace SuperMaxim.Core.Logging
         public ILogger LogWarning(string format, params object[] messages)
         {
             if (!IsEnabled) return this;
-            Console.WriteLine(format, messages);
+            Debug.LogWarningFormat(format, messages);
             return this;
         }
 
         public ILogger LogError(string error)
         {
             if (!IsEnabled) return this;
-            Console.WriteLine(error);
+            Debug.LogError(error);
             return this;
         }
 
@@ -138,7 +133,7 @@ namespace SuperMaxim.Core.Logging
         public ILogger LogError(string format, params object[] errors)
         {
             if (!IsEnabled) return this;
-            Console.WriteLine(format, errors);
+            Debug.LogErrorFormat(format, errors);
             return this;
         }
     }

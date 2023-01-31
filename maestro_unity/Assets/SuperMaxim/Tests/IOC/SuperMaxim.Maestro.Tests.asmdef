@@ -1,5 +1,5 @@
 {
-    "name": "SuperMaxim.Maestro.Editor.Tests",
+    "name": "SuperMaxim.Maestro.Tests",
     "rootNamespace": "",
     "references": [
         "GUID:27619889b8ba8c24980f49ee34dbb44a",
@@ -7,9 +7,7 @@
         "GUID:ee384bc0ffb46466c82f392c21c26a6c",
         "GUID:feffa0a89a0324527b2df83253e9afb6"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,
@@ -18,8 +16,7 @@
     ],
     "autoReferenced": false,
     "defineConstraints": [
-        "UNITY_INCLUDE_TESTS",
-        "UNITY"
+        "UNITY_INCLUDE_TESTS"
     ],
     "versionDefines": [],
     "noEngineReferences": false
