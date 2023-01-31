@@ -20,6 +20,16 @@ namespace SuperMaxim.IOC.Container
             return map as ITypeMap<T>;
         }
 
+        internal ITypeMap Get(Type type)
+        {
+            if (!_cache.ContainsKey(type))
+            {
+                return null;
+            }
+            var map = _cache[type];
+            return map;
+        }
+
         internal ITypeMap<T> Set<T>() where T : class
         {
             var map = new TypeMap<T>(this);

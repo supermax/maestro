@@ -1,24 +1,19 @@
 using System;
-using System.Collections.Generic;
-using System.Reflection;
-using SuperMaxim.Core.Extensions;
 using SuperMaxim.Core.Objects;
-using SuperMaxim.IOC.Attributes;
 using SuperMaxim.IOC.Container;
-using SuperMaxim.IOC.Extensions;
 
 namespace SuperMaxim.IOC
 {
     public class Maestro : Singleton<IMaestro, Maestro>, IMaestro, IDisposable
     {
-        private readonly TypeMapCache _cache = new TypeMapCache();
+        private readonly TypeMapCache _cache = new();
 
         public ITypeMapResolver<T> Get<T>() where T : class
         {
             var type = typeof(T);
             if (!type.IsClass && !type.IsInterface)
             {
-                throw new OperationCanceledException($"The type {type} is not a class!");
+                throw new OperationCanceledException($"The type {type} is not a class and not an interface!");
             }
             var map = _cache.Get<T>() as ITypeMapResolver<T>;
             return map;
@@ -29,7 +24,7 @@ namespace SuperMaxim.IOC
             var type = typeof(T);
             if (!type.IsClass && !type.IsInterface)
             {
-                throw new OperationCanceledException($"The type {type} is not a class!");
+                throw new OperationCanceledException($"The type {type} is not a class and not an interface!");
             }
             var map = _cache.Set<T>();
             return map;
@@ -40,7 +35,7 @@ namespace SuperMaxim.IOC
             var type = typeof(T);
             if (!type.IsClass && !type.IsInterface)
             {
-                throw new OperationCanceledException($"The type {type} is not a class!");
+                throw new OperationCanceledException($"The type {type} is not a class and not an interface!");
             }
             var map = _cache.Get<T>() as ITypeMapReset<T>;
             return map;
@@ -51,7 +46,7 @@ namespace SuperMaxim.IOC
             var type = typeof(T);
             if (!type.IsClass && !type.IsInterface)
             {
-                throw new OperationCanceledException($"The type {type} is not a class!");
+                throw new OperationCanceledException($"The type {type} is not a class and not an interface!");
             }
             _cache.Remove<T>();
         }
