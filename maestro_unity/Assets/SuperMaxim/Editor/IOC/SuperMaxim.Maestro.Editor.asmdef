@@ -1,0 +1,19 @@
+{
+    "name": "SuperMaxim.Maestro.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ee384bc0ffb46466c82f392c21c26a6c",
+        "GUID:feffa0a89a0324527b2df83253e9afb6"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

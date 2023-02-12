@@ -1,11 +1,10 @@
 {
-    "name": "SuperMaxim.Maestro.Editor",
+    "name": "SuperMaxim.Maestro",
+    "rootNamespace": "",
     "references": [
-        "SuperMaxim.Maestro"
+        "GUID:ee384bc0ffb46466c82f392c21c26a6c"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

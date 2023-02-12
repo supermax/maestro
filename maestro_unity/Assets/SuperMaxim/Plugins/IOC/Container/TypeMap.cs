@@ -15,14 +15,14 @@ namespace SuperMaxim.IOC.Container
     internal class TypeMap<T> : ITypeMap, ITypeMap<T>, ITypeMapResolver<T>, ITypeMapReset<T> where T : class
     {
         private string _defaultMapTypeKey;
-        
+
         private IDictionary<string, TypeMapConfig> _mapTypes;
 
         private string _defaultInstanceKey;
-        
+
         private IDictionary<string, T> _instances;
 
-        private Type[] _dependencies;
+        private List<Type> _dependencies;
 
         private TypeMapCache _cache;
 
@@ -32,7 +32,7 @@ namespace SuperMaxim.IOC.Container
             _mapTypes = new ConcurrentDictionary<string, TypeMapConfig>();
             _instances = new ConcurrentDictionary<string, T>();
         }
-        
+
         private ITypeMap<T> MapType<TM>(string key = null, bool isSingleton = false) where TM : class, T
         {
             var type = typeof(TM);
@@ -45,7 +45,7 @@ namespace SuperMaxim.IOC.Container
             {
                 _defaultMapTypeKey = typeKey;
             }
-            
+
             var mapAtt = type.GetCustomAttribute<TypeMapAttribute>();
             if (mapAtt != null && mapAtt.IsSingleton)
             {
@@ -53,7 +53,7 @@ namespace SuperMaxim.IOC.Container
                 //mapAtt.MapTypes // TODO map subtypes
                 //mapAtt.InitTrigger // TODO refer to trigger
             }
-            
+
             var depAtt = type.GetCustomAttribute<DependencyAttribute>();
             if (depAtt != null && !depAtt.Dependencies.IsNullOrEmpty())
             {
@@ -69,7 +69,7 @@ namespace SuperMaxim.IOC.Container
             _mapTypes[typeKey] = new TypeMapConfig {Type = type, IsSingleton = isSingleton};
             return this;
         }
-        
+
         public ITypeMap<T> To<TM>(string key = null) where TM : class, T
         {
             return MapType<TM>(key);
@@ -140,7 +140,7 @@ namespace SuperMaxim.IOC.Container
                 instance = _instances[instanceKey];
                 return instance;
             }
-            
+
             var typeKey = (key ?? _defaultMapTypeKey) ?? type.FullName;
             if (!_mapTypes.ContainsKey(typeKey))
             {
@@ -150,38 +150,31 @@ namespace SuperMaxim.IOC.Container
             {
                 type = _mapTypes[typeKey].Type;
             }
-            
-            instance = Resolve(type, args);
+
+            instance = (T)Resolve(type, args);
             if (!_mapTypes[typeKey].IsSingleton)
             {
                 return instance;
             }
-            
+
             _instances[typeKey] = instance;
             return instance;
         }
-        
+
         public T Inject(T instance, params object[] args)
         {
             // TODO implement
             return default;
         }
 
-        private T Resolve(Type type, params object[] args)
-        {
-            var dependencies = new List<Type>(); // TODO optimise this
-            var instance = Resolve(type, args, dependencies);
-            return instance;
-        }
-        
         public void Dispose()
         {
             _cache = null;
-            
+
             _mapTypes?.Clear();
             _mapTypes = null;
             _defaultMapTypeKey = null;
-            
+
             _instances?.Clear();
             _instances = null;
             _defaultInstanceKey = null;
@@ -192,10 +185,15 @@ namespace SuperMaxim.IOC.Container
             return $"{nameof(TypeMap<T>)}<{typeof(T).FullName}>";
         }
 
+        Type ITypeMap.GetMappedType()
+        {
+            return _mapTypes[_defaultMapTypeKey].Type;
+        }
+
         // TODO split into short methods
-        // TODO use args
+        // TODO use args param
         // TODO move back to TypeMap?
-        private T Resolve(Type src, object[] args, ICollection<Type> dependencies)
+        private object Resolve(Type src, object[] args)
         {
             if (src == null)
             {
@@ -203,24 +201,30 @@ namespace SuperMaxim.IOC.Container
             }
             if (!src.IsClass)
             {
-                throw new OperationCanceledException($"The {src} is not a class!");
+                var type = _cache.Get(src);
+                if (type == null)
+                {
+                    throw new OperationCanceledException($"The {src} is not a class!");
+                }
+                src = type.GetMappedType();
             }
 
-            T instance;
+            object instance;
 
             var depAtt = src.GetCustomAttribute<DependencyAttribute>();
             if (depAtt != null && !depAtt.Dependencies.IsNullOrEmpty())
             {
+                _dependencies ??= new List<Type>();
                 foreach (var dependency in depAtt.Dependencies)
                 {
                     // TODO check for circular dependency
-                    if (dependencies.Contains(dependency))
+                    if (_dependencies.Contains(dependency))
                     {
                         // TODO write to log
                         continue;
                     }
-                    dependencies.Add(dependency);
-                    Resolve(dependency, args, dependencies);
+                    _dependencies.Add(dependency);
+                    Resolve(dependency, args);
                 }
             }
 
@@ -233,7 +237,7 @@ namespace SuperMaxim.IOC.Container
             var ctorParams = ctor.GetParameters();
             if (ctorParams.IsNullOrEmpty())
             {
-                instance = (T)ctor.Invoke(null);
+                instance = ctor.Invoke(null);
             }
             else
             {
@@ -242,10 +246,10 @@ namespace SuperMaxim.IOC.Container
                 {
                     var ctorParam = ctorParams[i];
                     var ctorParamType = ctorParam.ParameterType;
-                    var ctorParamValue = Resolve(ctorParamType, args, dependencies);
+                    var ctorParamValue = Resolve(ctorParamType, args);
                     ctorParamValues[i] = ctorParamValue;
                 }
-                instance = (T)ctor.Invoke(ctorParamValues);
+                instance = ctor.Invoke(ctorParamValues);
             }
 
             var props = src.GetInjectableProperties();
@@ -259,7 +263,7 @@ namespace SuperMaxim.IOC.Container
                         continue;
                     }
 
-                    var propValue = Resolve(prop.PropertyType, args, dependencies);
+                    var propValue = Resolve(prop.PropertyType, args);
                     prop.SetValue(instance, propValue);
                 }
             }
@@ -269,7 +273,7 @@ namespace SuperMaxim.IOC.Container
             {
                 return instance;
             }
-            
+
             foreach (var method in methods)
             {
                 var methodParams = method.GetParameters();
@@ -280,7 +284,7 @@ namespace SuperMaxim.IOC.Container
                     {
                         var methodParam = methodParams[i];
                         var paramType = methodParam.ParameterType;
-                        var paramInstance = Resolve(paramType, args, dependencies);
+                        var paramInstance = Resolve(paramType, args);
                         methodParamsAry[i] = paramInstance;
                     }
                     method.Invoke(instance, methodParamsAry);

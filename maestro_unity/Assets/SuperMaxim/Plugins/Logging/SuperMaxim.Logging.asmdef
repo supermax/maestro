@@ -1,6 +1,9 @@
 {
-    "name": "SuperMaxim.Maestro",
-    "references": [],
+    "name": "SuperMaxim.Logging",
+    "rootNamespace": "",
+    "references": [
+        "GUID:ee384bc0ffb46466c82f392c21c26a6c"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

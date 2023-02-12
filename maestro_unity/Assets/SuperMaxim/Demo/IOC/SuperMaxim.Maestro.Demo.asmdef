@@ -1,6 +1,8 @@
 {
     "name": "SuperMaxim.Maestro.Demo",
+    "rootNamespace": "",
     "references": [
+        "GUID:ee384bc0ffb46466c82f392c21c26a6c",
         "GUID:feffa0a89a0324527b2df83253e9afb6",
         "GUID:1e60ca7dfd34f44f3990f7793940d275"
     ],

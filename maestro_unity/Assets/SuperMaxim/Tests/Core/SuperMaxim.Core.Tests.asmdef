@@ -1,9 +1,11 @@
 {
-    "name": "SuperMaxim.Maestro.Tests",
+    "name": "SuperMaxim.Core.Tests",
+    "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "SuperMaxim.Maestro"
+        "SuperMaxim.Core",
+        "SuperMaxim.Logging"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
