@@ -2,7 +2,8 @@
     "name": "SuperMaxim.Maestro",
     "rootNamespace": "",
     "references": [
-        "GUID:ee384bc0ffb46466c82f392c21c26a6c"
+        "GUID:ee384bc0ffb46466c82f392c21c26a6c",
+        "GUID:3a31de1be0e204a2a843f7832a7673dc"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

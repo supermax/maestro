@@ -1,3 +1,4 @@
+using SuperMaxim.Demo.IOC.Entities;
 using SuperMaxim.IOC;
 using UnityEngine;
 

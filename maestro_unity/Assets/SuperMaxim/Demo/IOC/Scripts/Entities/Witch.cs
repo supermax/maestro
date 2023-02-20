@@ -1,15 +1,10 @@
 using SuperMaxim.IOC.Attributes;
 
-namespace SuperMaxim.Demo
+namespace SuperMaxim.Demo.IOC.Entities
 {
-    public interface IEnemy
-    {
-        
-    }
-
     [TypeMap]
     public class Witch : IEnemy
     {
-        
+
     }
 }

@@ -40,11 +40,13 @@ namespace SuperMaxim.IOC.Container
             {
                 throw new OperationCanceledException($"The type {type} is not a class!");
             }
-            var typeKey = key ?? type.FullName;
-            if (_defaultMapTypeKey == null)
+            if (type == GetType())
             {
-                _defaultMapTypeKey = typeKey;
+                throw new InvalidOperationException($"The type {type} cannot be {GetType()}!");
             }
+
+            var typeKey = key ?? type.FullName;
+            _defaultMapTypeKey ??= typeKey;
 
             var mapAtt = type.GetCustomAttribute<TypeMapAttribute>();
             if (mapAtt != null && mapAtt.IsSingleton)
@@ -82,10 +84,12 @@ namespace SuperMaxim.IOC.Container
             {
                 throw new OperationCanceledException($"The type {type} is not a class!");
             }
-            if (key == null)
+            if (type == GetType())
             {
-                key = type.FullName;
+                throw new InvalidOperationException($"The type {type} cannot be {GetType()}!");
             }
+
+            key ??= type.FullName;
             _mapTypes.Remove(key);
             if (_defaultMapTypeKey == key)
             {
@@ -96,20 +100,7 @@ namespace SuperMaxim.IOC.Container
 
         public ITypeMapReset<T> From<TM>(TM instance, string key = null) where TM : class, T
         {
-            var type = typeof(TM);
-            if (!type.IsClass)
-            {
-                throw new OperationCanceledException($"The type {type} is not a class!");
-            }
-            if (key == null)
-            {
-                key = type.FullName;
-            }
-            _instances.Remove(key);
-            if (_defaultInstanceKey == key)
-            {
-                _defaultInstanceKey = null;
-            }
+            From<TM>(key);
             return this;
         }
 
@@ -121,10 +112,16 @@ namespace SuperMaxim.IOC.Container
         public ITypeMap<T> Singleton<TM>(TM instance, string key = null) where TM : class, T
         {
             var type = typeof(TM);
-            if (key == null)
+            if (!type.IsClass)
             {
-                key = type.FullName;
+                throw new OperationCanceledException($"The type {type} is not a class!");
             }
+            if (type == GetType())
+            {
+                throw new InvalidOperationException($"The type {type} cannot be {GetType()}!");
+            }
+
+            key ??= type.FullName;
             _defaultInstanceKey = key;
             _instances[key] = instance;
             return Singleton<TM>(key);

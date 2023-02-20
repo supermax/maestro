@@ -9,8 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6dec164d58644978dc50206efe7f2f5, type: 3}
+  m_Script: {fileID: 11500000, guid: e5ae38ac754c498eba7081e2345e1d24, type: 3}
   m_Name: BootConfig
   m_EditorClassIdentifier: 
-  _assemblyConfig:
-  - _typeConfig: []
+  _autoConfig: 0
+  _assemblies:
+  - Name: 
+    _assembly: {fileID: 5897886265953266890, guid: ee384bc0ffb46466c82f392c21c26a6c,
+      type: 3}
+    _types:
+    - Name: 
+      _initTrigger: 0
+      _singleton: 0
+      _type: {fileID: 11500000, guid: a85430cc5a4a4279a992be322de12b29, type: 3}
+      _implementations:
+      - {fileID: 11500000, guid: 8472c6472e6d4301873871a9e8fcf952, type: 3}
+      _dependencies:
+      - {fileID: 11500000, guid: 8687db4f8d1c4354eae1e66a957cba30, type: 3}

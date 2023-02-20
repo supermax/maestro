@@ -1,15 +1,23 @@
 using System;
-using System.Collections.Generic;
+using System.Runtime.Serialization;
 using UnityEngine;
 
 namespace SuperMaxim.IOC.Config
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "BootConfig", menuName = "Boot Config")]
+    [DataContract]
     public class BootConfig : ScriptableObject
     {
-        // TODO implement
+        public bool AutoConfig
+        {
+            get;
+            set;
+        }
 
-        [SerializeField] private AssemblyConfig[] _assemblyConfig;
+        public AssemblyConfig[] Assemblies
+        {
+            get;
+            set;
+        }
     }
 }

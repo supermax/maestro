@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SuperMaxim.IOC.Container
 {
@@ -8,7 +9,7 @@ namespace SuperMaxim.IOC.Container
 
         ITypeMap<T> Singleton<TM>(string key = null) where TM : class, T;
 
-        ITypeMap<T> Singleton<TM>(TM instance, string key = null) where TM : class, T;
+        ITypeMap<T> Singleton<TM>([DisallowNull] TM instance, string key = null) where TM : class, T;
     }
 
     internal interface ITypeMap : IDisposable

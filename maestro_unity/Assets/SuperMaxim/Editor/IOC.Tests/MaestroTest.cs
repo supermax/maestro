@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
-using SuperMaxim.Editor.Tests.Entities;
+using SuperMaxim.Editor.IOC.Tests.Entities;
 using SuperMaxim.IOC;
 using UnityEngine;
 
-namespace SuperMaxim.Editor.Tests
+namespace SuperMaxim.Editor.IOC.Tests
 {
     /* TODO Add tests:
         1) Singleton
@@ -12,6 +12,7 @@ namespace SuperMaxim.Editor.Tests
         4) Dispose
         5) All other APIs
      */
+    [TestFixture]
     public class MaestroTest
     {
         [SetUp]

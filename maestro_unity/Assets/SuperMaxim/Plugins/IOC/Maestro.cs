@@ -26,6 +26,14 @@ namespace SuperMaxim.IOC
             {
                 throw new OperationCanceledException($"The type {type} is not a class and not an interface!");
             }
+            if (type == GetType())
+            {
+                throw new InvalidOperationException($"The type {type} cannot be {GetType()}!");
+            }
+            if (type == typeof (IMaestro))
+            {
+                throw new InvalidOperationException($"The type {type} cannot be {typeof(IMaestro)}!");
+            }
             var map = _cache.Set<T>();
             return map;
         }

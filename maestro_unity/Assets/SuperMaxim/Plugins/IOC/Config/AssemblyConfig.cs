@@ -1,14 +1,14 @@
 using System;
-using UnityEngine;
 
 namespace SuperMaxim.IOC.Config
 {
     [Serializable]
-    public class AssemblyConfig
+    public class AssemblyConfig : BaseConfig
     {
-        // TODO implement
-        
-        [SerializeField]
-        private TypeConfig[] _typeConfig;
+        public TypeConfig[] Types
+        {
+            get;
+            set;
+        }
     }
 }

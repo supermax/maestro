@@ -1,32 +1,45 @@
 using System;
-using System.Reflection;
-using SuperMaxim.IOC.Attributes;
-using UnityEngine;
+using System.Runtime.Serialization;
 
 namespace SuperMaxim.IOC.Config
 {
     [Serializable]
-    public class TypeConfig
+    [DataContract]
+    public class TypeConfig : BaseConfig
     {
-        [TypeDrawer]
-        [SerializeField]
-        private System.Reflection.TypeDelegator _type;
-
-        public Type SourceType { get; set; }
-        
-        public Type[] TypeMappings { get; set; }
-        
-        public Type[] Dependencies { get; set; }
-        
-        public TypeInitTrigger InitTrigger { get; set; }
-        
-        public bool IsSingleton { get; set; }
-
-        public TypeConfig()
+        [DataMember(Name = "sourceType")]
+        public Type SourceType
         {
-            //System.Reflection.TypeDelegator d = new TypeDelegator(TargetType);
-            
-            
+            get;
+            set;
+        }
+
+        [DataMember(Name = "typeMappings")]
+        public Type[] TypeMappings
+        {
+            get;
+            set;
+        }
+
+        [DataMember(Name = "typeDependencies")]
+        public Type[] TypeDependencies
+        {
+            get;
+            set;
+        }
+
+        [DataMember(Name = "typeDependencies")]
+        public TypeInitTrigger InitTrigger
+        {
+            get;
+            set;
+        }
+
+        [DataMember(Name = "isSingleton")]
+        public bool IsSingleton
+        {
+            get;
+            set;
         }
     }
 }
