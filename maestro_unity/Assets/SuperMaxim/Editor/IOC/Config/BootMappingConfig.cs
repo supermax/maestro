@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using SuperMaxim.Core.Extensions;
 using SuperMaxim.IOC.Config;
 using UnityEngine;
 
@@ -15,6 +17,11 @@ namespace SuperMaxim.Editor.IOC.Config
         private void OnValidate()
         {
             Debug.Log(nameof(OnValidate));
+
+            AutoConfig = _autoConfig;
+            Assemblies = _assemblies.Select(assemblyMapping => assemblyMapping.GetConfig()).ToArray();
+            var json = Assemblies.ToJson();
+            Debug.Log(json);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using SuperMaxim.Core.Extensions;
 using SuperMaxim.IOC.Config;
@@ -12,6 +13,18 @@ namespace SuperMaxim.IOC
     public class Bootstrapper : MonoBehaviour
     {
         [SerializeField] protected BootConfig _bootConfig;
+
+        public BootConfig BootConfig
+        {
+            get
+            {
+                return _bootConfig;
+            }
+            set
+            {
+                _bootConfig = value;
+            }
+        }
 
         private void Awake()
         {
@@ -67,7 +80,8 @@ namespace SuperMaxim.IOC
         {
             var maestroInterfaceType = typeof (IMaestro);
             var mapMethodInfo = maestroInterfaceType.GetMethod(nameof(Maestro.Default.Map));
-            var genericMapMethodInfo = mapMethodInfo.MakeGenericMethod(typeConfig.SourceType);
+            var sourceType = Type.GetType(typeConfig.SourceType);
+            var genericMapMethodInfo = mapMethodInfo.MakeGenericMethod(sourceType);
 
             genericMapMethodInfo.Invoke(Maestro.Default, null);
 

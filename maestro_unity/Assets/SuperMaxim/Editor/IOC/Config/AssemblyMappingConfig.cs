@@ -14,7 +14,13 @@ namespace SuperMaxim.Editor.IOC.Config
 
         public override AssemblyConfig GetConfig()
         {
-            throw new NotImplementedException();
+            Name = _assembly.name;
+            var config = new AssemblyConfig
+                {
+                    Name = _assembly.name,
+                    Types = new TypeConfig[_types.Length]
+                };
+            return config;
         }
     }
 }

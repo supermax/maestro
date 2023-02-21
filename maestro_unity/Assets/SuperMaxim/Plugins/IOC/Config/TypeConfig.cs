@@ -8,27 +8,27 @@ namespace SuperMaxim.IOC.Config
     public class TypeConfig : BaseConfig
     {
         [DataMember(Name = "sourceType")]
-        public Type SourceType
+        public string SourceType
         {
             get;
             set;
         }
 
         [DataMember(Name = "typeMappings")]
-        public Type[] TypeMappings
+        public string[] TypeMappings
         {
             get;
             set;
         }
 
         [DataMember(Name = "typeDependencies")]
-        public Type[] TypeDependencies
+        public string[] TypeDependencies
         {
             get;
             set;
         }
 
-        [DataMember(Name = "typeDependencies")]
+        [DataMember(Name = "initTrigger")]
         public TypeInitTrigger InitTrigger
         {
             get;
