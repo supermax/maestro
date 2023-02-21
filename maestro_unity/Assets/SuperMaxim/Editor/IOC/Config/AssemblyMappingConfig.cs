@@ -20,6 +20,10 @@ namespace SuperMaxim.Editor.IOC.Config
                     Name = _assembly.name,
                     Types = new TypeConfig[_types.Length]
                 };
+            for (var i = 0; i < _types.Length; i++)
+            {
+                config.Types[i] = _types[i].GetConfig();
+            }
             return config;
         }
     }

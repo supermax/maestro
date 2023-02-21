@@ -1,7 +1,9 @@
 using System;
+using System.IO;
 using System.Linq;
 using SuperMaxim.Core.Extensions;
 using SuperMaxim.IOC.Config;
+using UnityEditor;
 using UnityEngine;
 
 namespace SuperMaxim.Editor.IOC.Config
@@ -11,6 +13,8 @@ namespace SuperMaxim.Editor.IOC.Config
     public class BootMappingConfig : BootConfig
     {
         [SerializeField] private bool _autoConfig;
+
+        [SerializeField] private TextAsset _configJson;
 
         [SerializeField] private AssemblyMappingConfig[] _assemblies;
 
@@ -22,6 +26,19 @@ namespace SuperMaxim.Editor.IOC.Config
             Assemblies = _assemblies.Select(assemblyMapping => assemblyMapping.GetConfig()).ToArray();
             var json = Assemblies.ToJson();
             Debug.Log(json);
+
+            string configFilePath;
+            if (_configJson == null)
+            {
+                _configJson = new TextAsset();
+                configFilePath = AssetDatabase.GetAssetPath(_configJson);
+                configFilePath = Path.ChangeExtension(configFilePath, "json");
+            }
+            else
+            {
+                configFilePath = AssetDatabase.GetAssetPath(_configJson);
+            }
+            File.WriteAllText(configFilePath, json);
         }
     }
 }
